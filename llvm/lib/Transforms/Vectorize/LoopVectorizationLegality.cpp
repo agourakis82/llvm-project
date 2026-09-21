@@ -49,7 +49,7 @@ AllowStridedPointerIVs("lv-strided-pointer-ivs", cl::init(false), cl::Hidden,
                                 "pointer induction variables."));
 
 static cl::opt<bool> EnableCompressingPatterns(
-    "lv-compressing-patterns", cl::init(false), cl::Hidden,
+    "lv-compressing-patterns", cl::init(true), cl::Hidden,
     cl::desc("Enable recognition of compressing patterns."));
 
 static cl::opt<bool>

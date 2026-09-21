@@ -1,4 +1,4 @@
-; RUN: opt < %s -lv-compressing-patterns=true -enable-early-exit-vectorization-with-side-effects -force-target-supports-masked-memory-ops -force-vector-width=4 -passes=loop-vectorize -disable-output -pass-remarks-missed=".*" 2>&1 | FileCheck %s
+; RUN: opt < %s -enable-early-exit-vectorization-with-side-effects -force-target-supports-masked-memory-ops -force-vector-width=4 -passes=loop-vectorize -disable-output -pass-remarks-missed=".*" 2>&1 | FileCheck %s
 
 ; CHECK: loop not vectorized
 
