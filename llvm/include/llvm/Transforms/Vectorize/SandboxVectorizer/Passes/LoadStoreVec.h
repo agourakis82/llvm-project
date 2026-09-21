@@ -33,6 +33,7 @@ class Function;
 class Value;
 class Instruction;
 class Type;
+class Constant;
 
 class LLVM_ABI LoadStoreVec final : public RegionPass {
   const DataLayout *DL = nullptr;
@@ -61,14 +62,17 @@ class LLVM_ABI LoadStoreVec final : public RegionPass {
   /// or nullptr if \p Loads are not a vectorizable.
   LoadInst *createVectorLoad(BndlRef<Instruction *> Loads);
 
+  /// Returns a constant with the same bits as \p C, but with type \p DestTy.
+  /// \p DestTy must have the same size as \p C. \returns nullptr if a
+  /// non-integral pointer is involved.
+  Constant *createEquivalentConstantWithType(Constant *C, Type *DestTy);
+
   /// Builds a ConstantVector with \p LaneTy elements from the constant store
-  /// operands in \p Constants, reinterpreting the bits of constants of other
-  /// types (e.g. float or ptr in an i32 vector) and splitting constants wider
-  /// than \p LaneTy into several lanes. Casts are folded, so nothing is
-  /// inserted at \p WhereIt. \returns the packed ConstantVector, or nullptr if
-  /// a constant cannot be reinterpreted.
-  Value *createConstantVector(ArrayRef<Value *> Constants, Type *LaneTy,
-                              BBIterator WhereIt);
+  /// operands in \p Constants. Constants of other types are converted to
+  /// \p LaneTy, and constants wider than \p LaneTy are split into several
+  /// elements. \returns the packed ConstantVector, or nullptr if a constant
+  /// cannot be converted.
+  Value *createConstantVector(ArrayRef<Value *> Constants, Type *LaneTy);
 
   /// Vectorizes \p Stores and their operands if constants or consecutive
   /// loads. \returns true on success.
